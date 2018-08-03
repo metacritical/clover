@@ -6,5 +6,5 @@ int clj_int(){
 
 int main() {
   printf("%d",clj_int());
-  return 42;
+  return 0;
 }
