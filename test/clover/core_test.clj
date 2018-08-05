@@ -2,6 +2,6 @@
   (:require [clojure.test :refer :all]
             [clover.core :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
+(deftest test-fixnums
+  (testing "Fixnum to machine code"
     (is (= 0 1))))
