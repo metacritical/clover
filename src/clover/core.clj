@@ -15,7 +15,8 @@
     (println "LLVM Bitcode to assembly"))
 
   (if (sh "clang" "build/runtime.c" "build/program.s" "-o" "build/program")
-    (println "Compilation with runtime.")))
+    (println "Compile and Link with runtime."))
+  (System/exit 0))
 
 (defn clover-compile
   "Emit given program to assembly and compile with runtime."
