@@ -1,4 +1,5 @@
 (ns clover.core
+  (:use [clojure.core])
   (:require [clover.primitive :as primitive])
   (:gen-class))
 
@@ -7,6 +8,8 @@
 (defn emit [expr]
   (spit "build/program.ll" expr))
 
+;;TODO: These build instructions should be produced dynamically
+;;and create a Makefile.
 (defn build []
   (if (sh "cp" "runtime/runtime.c" "build/")
     (println "Copy Runtime"))
@@ -22,8 +25,9 @@
   "Emit given program to assembly and compile with runtime."
   [expr]
   (cond
-    (integer? expr) (emit (primitive/compile-fixnum expr))))
+    (integer? expr) (emit (primitive/compile-fixnum expr))
+    (boolean? expr) (emit (primitive/compile-boolean expr))))
 
 (defn -main []
-  (clover-compile 42)
+  (clover-compile true)
   (build))
