@@ -28,6 +28,8 @@ static void print_clj(Vars *obj){
     }else{
       printf("false\n");
     }
+  }else if(obj->type == String){
+    printf("%s\n", obj->Val.string);
   }else{
     printf("Unknown Type.\n");
   }

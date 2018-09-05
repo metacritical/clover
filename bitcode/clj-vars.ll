@@ -153,3 +153,14 @@ define %struct.Vars* @boolean(i1 zeroext) #0 {
   %8 = load %struct.Vars*, %struct.Vars** %3, align 8
   ret %struct.Vars* %8
 }
+
+define %struct.Vars* @string(i8*) #0 {
+  %2 = alloca i8*, align 8
+  %3 = alloca %struct.Vars*, align 8
+  store i8* %0, i8** %2, align 8
+  %4 = load i8*, i8** %2, align 8
+  %5 = call %struct.Vars* @createString(i8* %4)
+  store %struct.Vars* %5, %struct.Vars** %3, align 8
+  %6 = load %struct.Vars*, %struct.Vars** %3, align 8
+  ret %struct.Vars* %6
+}

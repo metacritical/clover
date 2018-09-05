@@ -13,6 +13,10 @@
   "Emit llvm null code."
   (emitter/clj-nil nl))
 
+(defn compile-string [strn]
+  "Emit llvm string code."
+  (emitter/clj-str strn))
+
 ;; (defn compile-char [chr]
   ;; "Emit llvm character code."
   ;; (emitter/clj-char chr))
