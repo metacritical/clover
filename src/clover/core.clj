@@ -45,7 +45,7 @@
 (defn repl []
   (printf ">> ")
   (flush)
-  (loop [in (read)]
+  (let [in (read)]
     (println "=> " (read-build-run in)))
   (recur))
 
