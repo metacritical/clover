@@ -22,3 +22,9 @@
     }")))
 
 (defn clj-nil [nl] nil)
+
+(defn clj-double [num]
+  (str "define %struct.Vars* @clj_val() #0 {
+  %1 = call %struct.Vars* @fraction(double " num ")
+  ret %struct.Vars* %1
+}"))

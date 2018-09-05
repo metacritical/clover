@@ -36,6 +36,7 @@
   [expr]
   (cond
     (integer? expr) (emit (primitive/compile-fixnum expr))
+    (double? expr) (emit (primitive/compile-double expr))
     (string? expr) (emit (primitive/compile-string expr))
     (boolean? expr) (emit (primitive/compile-boolean expr))))
 

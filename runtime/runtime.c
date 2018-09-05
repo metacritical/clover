@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef enum { NIL, Integer, Fraction, String, Boolean, Symbol, Cons } Type;
+typedef enum { NIL, Integer, Fraction, String, Boolean, Symbol } Type;
 
 typedef struct Vars {
   Type type;
@@ -20,9 +20,10 @@ Vars *clj_val();
 
 static void print_clj(Vars *obj){
   if(obj->type == Integer){
-    printf("%ld", obj->Val.integer);
-  }
-  else if(obj->type == Boolean){
+    printf("%ld\n", obj->Val.integer);
+  }else if(obj->type == Fraction){
+   printf("%lf\n", obj->Val.fraction); 
+  }else if(obj->type == Boolean){
     if(obj->Val.boolean == 1){
       printf("true\n");
     }else{

@@ -78,14 +78,28 @@ Vars *string(char *c){
   return str;
 }
 
+Vars *fraction(double d){
+  Vars *fractn = createFraction(d);
+  return fractn;
+}
+
+//Number 
 /* Vars *clj_val(){ */
   /* return number(42); */
 /* } */
 
+//Boolean
 /* Vars *clj_val(){ */
   /* return boolean(true); */
 /* } */
 
-Vars *clj_val(){
-  return string("Hello World is not enough");
-}
+//String
+/* Vars *clj_val(){ */
+  /* return string("Hello World is not enough"); */
+/* } */
+
+//Fraction
+/* Vars *clj_val(){ */
+  /* return fraction(7687713263); */
+/* } */
+

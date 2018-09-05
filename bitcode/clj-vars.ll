@@ -164,3 +164,14 @@ define %struct.Vars* @string(i8*) #0 {
   %6 = load %struct.Vars*, %struct.Vars** %3, align 8
   ret %struct.Vars* %6
 }
+
+define %struct.Vars* @fraction(double) #0 {
+  %2 = alloca double, align 8
+  %3 = alloca %struct.Vars*, align 8
+  store double %0, double* %2, align 8
+  %4 = load double, double* %2, align 8
+  %5 = call %struct.Vars* @createFraction(double %4)
+  store %struct.Vars* %5, %struct.Vars** %3, align 8
+  %6 = load %struct.Vars*, %struct.Vars** %3, align 8
+  ret %struct.Vars* %6
+}
