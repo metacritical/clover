@@ -1,9 +1,16 @@
 (ns clover.llvm-emitter)
 
 (defn clj-int [num]
-  (format (slurp "bitcode/number.ll") num))
+  (str "define %struct.Vars* @clj_val() #0 {
+    %1 = call %struct.Vars*" "@number(i64 " num ") 
+    ret %struct.Vars* %1
+  }"))
 
 (defn clj-bool [bool]
-  (cond 
-    (false? bool) (format (slurp "llvm-bc/clj-bool.ll") false)
-    :else (format (slurp "llvm-bc/clj-bool.ll") true)))
+  (str "define %struct.Vars* @clj_val() #0 {
+    %1 = call %struct.Vars* @boolean(i1 zeroext " bool")
+    ret %struct.Vars* %1
+  }"))
+
+(defn clj-nil [nl]
+  nil)

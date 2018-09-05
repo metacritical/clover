@@ -73,11 +73,10 @@ Vars *boolean(bool b){
   return flag; 
 }
 
-/* int clj_val(){ */
-/*   return number(42); */
+/* Vars *clj_val(){ */
+  /* return number(42); */
 /* } */
 
-/* bool clj_val(){ */
-  /* Vars *a = boolean(true); */
-  /* return a->Val.boolean; */
-/* } */
+Vars *clj_val(){
+  return boolean(true);
+}

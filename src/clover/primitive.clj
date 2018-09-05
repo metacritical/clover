@@ -9,11 +9,10 @@
   "Emit llvm boolean code."
   (emitter/clj-bool bool))
 
+(defn compile-nil [nl]
+  "Emit llvm null code."
+  (emitter/clj-nil nl))
+
 ;; (defn compile-char [chr]
   ;; "Emit llvm character code."
   ;; (emitter/clj-char chr))
-
-;; (defn compile-nil [nl]
-  ;; "Emit llvm null code."
-  ;; (emitter/clj-nil nl))
-
