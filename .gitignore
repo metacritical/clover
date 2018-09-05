@@ -9,3 +9,7 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
+build/program
+build/program.ll
+build/program.s
+build/runtime.c
