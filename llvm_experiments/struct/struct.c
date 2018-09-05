@@ -73,10 +73,19 @@ Vars *boolean(bool b){
   return flag; 
 }
 
+Vars *string(char *c){
+  Vars *str = createString(c);
+  return str;
+}
+
 /* Vars *clj_val(){ */
   /* return number(42); */
 /* } */
 
+/* Vars *clj_val(){ */
+  /* return boolean(true); */
+/* } */
+
 Vars *clj_val(){
-  return boolean(true);
+  return string("Hello World is not enough");
 }

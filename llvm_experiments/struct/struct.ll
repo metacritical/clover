@@ -6,6 +6,7 @@ target triple = "x86_64-apple-macosx10.13.0"
 %struct.Vars = type { i32, %union.values }
 %union.values = type { i64 }
 
+
 ; Function Attrs: noinline nounwind optnone ssp uwtable
 define %struct.Vars* @createVars() #0 {
   %1 = alloca %struct.Vars*, align 8
@@ -160,8 +161,23 @@ define %struct.Vars* @boolean(i1 zeroext) #0 {
 }
 
 ; Function Attrs: noinline nounwind optnone ssp uwtable
+define %struct.Vars* @string(i8*) #0 {
+  %2 = alloca i8*, align 8
+  %3 = alloca %struct.Vars*, align 8
+  store i8* %0, i8** %2, align 8
+  %4 = load i8*, i8** %2, align 8
+  %5 = call %struct.Vars* @createString(i8* %4)
+  store %struct.Vars* %5, %struct.Vars** %3, align 8
+  %6 = load %struct.Vars*, %struct.Vars** %3, align 8
+  ret %struct.Vars* %6
+}
+
+
+@.str = private unnamed_addr constant [26 x i8] c"Hello World is not enough\00", align 1
+
+; Function Attrs: noinline nounwind optnone ssp uwtable
 define %struct.Vars* @clj_val() #0 {
-  %1 = call %struct.Vars* @boolean(i1 zeroext true)
+  %1 = call %struct.Vars* @string(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str, i32 0, i32 0))
   ret %struct.Vars* %1
 }
 
