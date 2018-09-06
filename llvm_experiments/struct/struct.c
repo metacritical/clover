@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef enum { NIL, Integer, Fraction, String, Boolean, Symbol, Cons } Type;
+typedef enum { NIL, Integer, Fraction, String, Boolean, Symbol, Character } Type;
 
 typedef struct Vars {
   Type type;
