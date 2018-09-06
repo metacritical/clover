@@ -8,6 +8,7 @@
   (driver/build-run))
 
 (defn repl []
+  (println "Clover 0.0.1 Interactive REPL.")
   (printf ">> ")
   (flush)
   (let [in (read)]
