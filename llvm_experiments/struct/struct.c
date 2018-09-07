@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef enum { NIL, Integer, Fraction, String, Boolean, Symbol, Character } Type;
+typedef enum { NIL, Integer, Fraction, String, Boolean, Symbol, Character,
+	       PersistentList, Function} Type;
+
 
 typedef struct Vars {
   Type type;
@@ -63,6 +65,8 @@ Vars *createSymbol(char *sym){
     return this;
 }
 
+Vars *createUnaryFunctions( 
+
 Vars *number(long int n){
   Vars *numb = createInteger(n);
   return numb;
@@ -83,6 +87,12 @@ Vars *fraction(double d){
   return fractn;
 }
 
+Vars *nil(void){
+  Vars *null = createNIL();
+  return null;
+}
+  
+
 //Number 
 /* Vars *clj_val(){ */
   /* return number(42); */
@@ -101,5 +111,10 @@ Vars *fraction(double d){
 //Fraction
 /* Vars *clj_val(){ */
   /* return fraction(7687713263); */
+/* } */
+
+//Nil
+/* Vars *clj_val(){ */
+  /* return nil(); */
 /* } */
 

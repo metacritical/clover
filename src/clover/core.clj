@@ -4,7 +4,9 @@
   (:gen-class))
 
 (defn read-build-run [expr]
-  (driver/clover-compile expr)
+  (try
+    (driver/clover-compile expr)
+    (catch Exception e (System/exit 0)))
   (driver/build-run))
 
 (defn repl []

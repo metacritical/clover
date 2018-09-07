@@ -1,8 +1,3 @@
-; ModuleID = 'struct.c'
-source_filename = "struct.c"
-target datalayout = "e-m:o-i64:64-f80:128-n8:16:32:64-S128"
-target triple = "x86_64-apple-macosx10.13.0"
-
 %struct.Vars = type { i32, %union.values }
 %union.values = type { i64 }
 
@@ -184,18 +179,16 @@ define %struct.Vars* @fraction(double) #0 {
 }
 
 ; Function Attrs: noinline nounwind optnone ssp uwtable
-define %struct.Vars* @clj_val() #0 {
-  %1 = call %struct.Vars* @fraction(double 0x41FCA3931EF00000)
-  ret %struct.Vars* %1
+define %struct.Vars* @nil() #0 {
+  %1 = alloca %struct.Vars*, align 8
+  %2 = call %struct.Vars* @createNIL()
+  store %struct.Vars* %2, %struct.Vars** %1, align 8
+  %3 = load %struct.Vars*, %struct.Vars** %1, align 8
+  ret %struct.Vars* %3
 }
 
-attributes #0 = { noinline nounwind optnone ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cx16,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #1 = { allocsize(0) "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cx16,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #2 = { allocsize(0) }
-
-!llvm.module.flags = !{!0, !1}
-!llvm.ident = !{!2}
-
-!0 = !{i32 1, !"wchar_size", i32 4}
-!1 = !{i32 7, !"PIC Level", i32 2}
-!2 = !{!"clang version 6.0.1 (tags/RELEASE_601/final)"}
+; Function Attrs: noinline nounwind optnone ssp uwtable
+define %struct.Vars* @clj_val() #0 {
+  %1 = call %struct.Vars* @nil()
+  ret %struct.Vars* %1
+}

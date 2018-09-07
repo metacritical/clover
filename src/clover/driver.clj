@@ -1,6 +1,9 @@
 (ns clover.driver
   (:use [clojure.java.io :as io]
-        [clover.primitive :as primitive]))
+        [clover.primitive :as primitive])
+  (:require [clojure.tools.analyzer :as ana]
+            [clojure.tools.analyzer.env :as env])
+  (:gen-class))
 
 (use '[clojure.java.shell :only [sh]])
 
@@ -33,7 +36,23 @@
   "Emit given program to assembly and compile with runtime."
   [expr]
   (cond
-    (integer? expr) (emit (primitive/compile-fixnum expr))
-    (double? expr) (emit (primitive/compile-double expr))
-    (string? expr) (emit (primitive/compile-string expr))
-    (boolean? expr) (emit (primitive/compile-boolean expr))))
+    (integer? expr)
+    (emit (primitive/compile-fixnum expr))
+    
+    (double? expr)
+    (emit (primitive/compile-double expr))
+    
+    (string? expr)
+    (emit (primitive/compile-string expr))
+    
+    (boolean? expr)
+    (emit (primitive/compile-boolean expr))
+    
+    (nil? expr)
+    (emit (primitive/compile-nil))
+
+    (list? expr)
+    (emit (primitive/compile-defn expr)))
+
+
+;; (catch Exception e (str "caught exception: " (.getMessage e)))

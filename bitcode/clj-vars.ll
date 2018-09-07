@@ -175,3 +175,27 @@ define %struct.Vars* @fraction(double) #0 {
   %6 = load %struct.Vars*, %struct.Vars** %3, align 8
   ret %struct.Vars* %6
 }
+
+define %struct.Vars* @nil() #0 {
+  %1 = alloca %struct.Vars*, align 8
+  %2 = call %struct.Vars* @createNIL()
+  store %struct.Vars* %2, %struct.Vars** %1, align 8
+  %3 = load %struct.Vars*, %struct.Vars** %1, align 8
+  ret %struct.Vars* %3
+}
+
+define i64 @add_one(i64) #0 {
+  %2 = alloca i64, align 8
+  store i64 %0, i64* %2, align 8
+  %3 = load i64, i64* %2, align 8
+  %4 = add nsw i64 %3, 1
+  ret i64 %4
+}
+
+define i64 @sub_one(i64) #0 {
+  %2 = alloca i64, align 8
+  store i64 %0, i64* %2, align 8
+  %3 = load i64, i64* %2, align 8
+  %4 = sub nsw i64 %3, 1
+  ret i64 %4
+}

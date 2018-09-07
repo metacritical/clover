@@ -13,3 +13,4 @@ build/program
 build/program.ll
 build/program.s
 build/runtime.c
+.rebel_readline_history
