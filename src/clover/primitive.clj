@@ -3,28 +3,36 @@
   (:gen-class))
  
 (defn compile-fixnum [num]
-  "Emit llvm fixnum code."
-  (emitter/clj-int num))
+  "Emit llvm fixnum bitcode."
+  (emitter/clj-fixnum num))
 
 (defn compile-boolean [bool]
-  "Emit llvm boolean code."
+  "Emit llvm boolean bitcode."
   (emitter/clj-bool bool))
 
 (defn compile-nil []
-  "Emit llvm null code."
+  "Emit llvm null bitcode."
   (emitter/clj-nil))
 
 (defn compile-string [string]
-  "Emit llvm string code."
+  "Emit llvm string bitcode."
   (emitter/clj-str string))
 
 (defn compile-double [num]
-  "Emit llvm double/float code."
+  "Emit llvm double bitcode."
   (emitter/clj-double num))
 
-(defn compile-char [chr]
-  "Emit llvm character code."
-  (emitter/clj-char chr))
+(defn compile-keyword [key]
+  "Emit llvm keyword bitcode"
+  (emitter/clj-keyword key))
+
+(defn compile-symbol [sym]
+  "Emit llvm symbol bitcode."
+  (emitter/clj-symbol sym))
+
+(defn compile-chr [chr]
+  "Emit llvm character bitcode."
+  (emitter/clj-chr chr))
 
 (defn compile-unary [expr]
   (case (first expr)

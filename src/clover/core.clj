@@ -9,12 +9,12 @@
   (driver/build-run))
 
 (defn repl []
-  (println "Clover 0.0.1 Interactive REPL.")
   (printf ">> ")
   (flush)
   (let [in (read)]
-    (println "=> " (read-build-run in)))
+    (print "=>"(read-build-run in)))
   (recur))
 
 (defn -main []
+  (println "Clover 0.0.1 Interactive REPL.")
   (repl))

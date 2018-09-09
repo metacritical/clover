@@ -2,24 +2,28 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef enum { NIL, Integer, Fraction, String, Boolean, Symbol, 
-	       PersistentList, Function} Type;
+typedef enum { NIL, Integer, Fraction,
+	       String, Boolean, Symbol,
+	       Character, PersistentList,
+	       Function, Keyword } Type;
 
-typedef struct Vars {
+typedef struct Obj {
   Type type;
   union values {
     long int integer;
     double fraction;
     bool boolean;
-    char *string;
-    char *symbol;
+    const char *string;
+    const char *symbol;
+    const char *keyword;
+    char character;
     int *nil;
   } Val;
-} Vars;
+} Obj;
 
-Vars *clj_val();
+Obj *clj_val();
 
-static void print_clj(Vars *obj){
+static void print_clj(Obj *obj){
   //Integer
   if(obj->type == Integer){
     printf("%ld\n", obj->Val.integer);
@@ -36,12 +40,22 @@ static void print_clj(Vars *obj){
       }
       //String
     }else if(obj->type == String){
-      printf("%s\n", obj->Val.string);
+      printf("\"%s\"\n", obj->Val.string);
       //Nil
     }else if(obj->type == NIL){
-      printf("nil");
+      printf("nil\n");
+      //Symbol
+    }else if(obj->type == Symbol){
+      printf("%s => Symbol\n", obj->Val.symbol);
+      //Keyword
+    }else if(obj->type == Keyword){
+      printf("%s\n", obj->Val.keyword);
+      //Character
+    }else if(obj->type == Character){
+      printf("\\%c\n", obj->Val.character);
+      //Unknown
     }else {
-      printf("Unknown Type.\n");
+      puts("Unknown Type.");
     }
 }
 

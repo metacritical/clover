@@ -7,15 +7,13 @@
             [clojure.tools.analyzer.env :as env])
   (:gen-class))
 
-;;TODO: These build instructions should be produced dynamically
-;;and create a Makefile.
 (defn shell-exec [cmd err-msg]
   (let [sh-out (shell/sh "/bin/sh" :in cmd)]
     (if (= (sh-out :err) "")
-      (print (sh-out :out))
+      (sh-out :out)
       (do
-        (println err-msg)
-        (println (sh-out :err))))))
+        (printf (str "\033[31;1m" (sh-out :err) "\033[0m"))
+        err-msg))))
 
 (defn cache-cleanup [] 
   (if (.exists (io/as-file "build/program"))
@@ -30,7 +28,7 @@
   (shell-exec "clang build/runtime.c build/program.s -o build/program"
               "# Compile Failure")
 
-  (shell-exec "build/program" "# Program build error."))
+  (shell-exec "build/program" "# Program build error.\n"))
 
 (defn emit [expr]
   (spit "build/program.ll" (str (slurp "bitcode/clj-vars.ll") expr)))
@@ -53,6 +51,15 @@
     
     (nil? expr)
     (emit (primitive/compile-nil))
+
+    (keyword? expr)
+    (emit (primitive/compile-keyword expr))
+
+    (symbol? expr)
+    (emit (primitive/compile-symbol expr))
+
+    (char? expr)
+    (emit (primitive/compile-chr expr))
 
     (list? expr)
     (emit (primitive/compile-defn expr))
