@@ -25,7 +25,7 @@
   (shell-exec "llc build/program.ll -o build/program.s" 
               "# LLVM Bitcode to assembly.")
 
-  (shell-exec "clang build/runtime.c build/program.s -o build/program"
+  (shell-exec "clang $(pkg-config --cflags glib-2.0) build/runtime.c build/program.s -o build/program"
               "# Compile Failure")
 
   (shell-exec "build/program" "# Program build error.\n"))

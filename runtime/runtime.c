@@ -8,7 +8,10 @@ typedef enum { NIL, Integer, Fraction,
 	       Character, PersistentList,
 	       Function, Keyword, ENV } Type;
 
-typedef GHashTable Env;
+typedef struct Env {
+  struct Env *up;
+  GHashTable *vars;
+} Env;
 
 typedef struct Obj {
   Type type;
@@ -23,14 +26,14 @@ typedef struct Obj {
     char character;
     int *nil;
 
+    Env *env;
+
     struct {
       struct Obj *ptr;
       struct Obj *params;
       struct Obj *body;
-      Env *env;
-    } fn
+    } fn;
 
-    Env env;
   } Val;
 } Obj;
 
