@@ -29,6 +29,8 @@ typedef struct Obj {
       struct Obj *body;
       Env *env;
     } fn
+
+    Env env;
   } Val;
 } Obj;
 
