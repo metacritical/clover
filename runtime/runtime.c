@@ -1,14 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <glib.h>
 
 typedef enum { NIL, Integer, Fraction,
 	       String, Boolean, Symbol,
 	       Character, PersistentList,
-	       Function, Keyword } Type;
+	       Function, Keyword, ENV } Type;
+
+typedef GHashTable Env;
 
 typedef struct Obj {
   Type type;
+
   union values {
     long int integer;
     double fraction;
@@ -18,6 +22,13 @@ typedef struct Obj {
     const char *keyword;
     char character;
     int *nil;
+
+    struct {
+      struct Obj *ptr;
+      struct Obj *params;
+      struct Obj *body;
+      Env *env;
+    } fn
   } Val;
 } Obj;
 
@@ -55,7 +66,7 @@ static void print_clj(Obj *obj){
       printf("\\%c\n", obj->Val.character);
       //Unknown
     }else {
-      puts("Unknown Type.");
+      printf("Unknown Type #< %d >", obj->type);
     }
 }
 

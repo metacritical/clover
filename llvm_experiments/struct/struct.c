@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <glib-object.h>
 
 typedef enum { NIL, Integer, Fraction,
 	       String, Boolean, Symbol,
