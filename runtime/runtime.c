@@ -3,15 +3,12 @@
 #include <stdbool.h>
 #include <glib.h>
 
-typedef enum { NIL, Integer, Fraction,
-	       String, Boolean, Symbol,
-	       Character, PersistentList,
-	       Function, Keyword, ENV } Type;
+typedef enum {
+      NIL, Integer, Fraction, String, Boolean, Symbol, Character, EmptyList,
+      List, Function, Keyword, ENV
+} Type;
 
-typedef struct Env {
-  struct Env *up;
-  GHashTable *vars;
-} Env;
+typedef struct Env { struct Env *up; GHashTable *vars; } Env;
 
 typedef struct Obj {
   Type type;
@@ -26,13 +23,17 @@ typedef struct Obj {
     char character;
     int *nil;
 
-    Env *env;
 
+    //Function attributes and code.
     struct {
-      struct Obj *ptr;
+      struct Obj (*ptr)(void *root, Env *env, struct Obj *args);
       struct Obj *params;
       struct Obj *body;
+      int param_count;
     } fn;
+
+    //Environment for the datatype.
+    Env *env;
 
   } Val;
 } Obj;
@@ -43,10 +44,10 @@ static void print_clj(Obj *obj){
   //Integer
   if(obj->type == Integer){
     printf("%ld\n", obj->Val.integer);
-  }else 
+  }else
     //Fraction
     if(obj->type == Fraction){
-      printf("%lf\n", obj->Val.fraction); 
+      printf("%lf\n", obj->Val.fraction);
       //Boolean
     }else if(obj->type == Boolean){
       if(obj->Val.boolean == 1){

@@ -1,13 +1,13 @@
 (ns clover.driver
-  (:use [clojure.java.io :as io]
-        [clover.primitive :as primitive])
+  (:use [clojure.java.io :as io])
   (:require [clojure.string :as str]
             [clojure.tools.analyzer :as ana]
             [clojure.java.shell :as shell]
             [clojure.tools.analyzer.env :as env])
+  (:import java.io.File)
   (:gen-class))
 
-(defn shell-exec [cmd err-msg]
+(defn exec [cmd err-msg]
   (let [sh-out (shell/sh "/bin/sh" :in cmd)]
     (if (= (sh-out :err) "")
       (sh-out :out)
@@ -15,53 +15,34 @@
         (printf (str "\033[31;1m" (sh-out :err) "\033[0m"))
         err-msg))))
 
-(defn cache-cleanup [] 
-  (if (.exists (io/as-file "build/program"))
-    (io/delete-file "build/program")))
+(defn cache-cleanup [tmpdir]
+  (if (.exists (io/as-file (str tmpdir "program")))
+    (io/delete-file (str tmpdir "program"))))
 
-(defn build-run []
-  (io/copy (io/file "runtime/runtime.c") (io/file "build/runtime.c"))
+(defn emit [expr] (str (slurp "bitcode/clj-vars.ll") expr))
 
-  (shell-exec "llc build/program.ll -o build/program.s" 
-              "# LLVM Bitcode to assembly.")
+(defn build-run [clj-vars]
+  (let [tmpdir (str (System/getProperty "java.io.tmpdir") "_clover_cache/")]
+    (if-not (.exists (io/file tmpdir))
+      (.mkdir (File. tmpdir)))
 
-  (shell-exec "clang $(pkg-config --cflags glib-2.0) build/runtime.c build/program.s -o build/program"
-              "# Compile Failure")
+    ;; Delete Previous program file
+    (cache-cleanup (str tmpdir "program"))
 
-  (shell-exec "build/program" "# Program build error.\n"))
+    ;; Spits clj-vars + expr bit code program file.
+    (spit (str tmpdir "program.ll") clj-vars)
+    ;; Copies runtime to temp directory.
+    (io/copy (io/file "runtime/runtime.c") (io/file (str tmpdir "runtime.c")))
 
-(defn emit [expr]
-  (spit "build/program.ll" (str (slurp "bitcode/clj-vars.ll") expr)))
+    ;;Compile emitted bitcode to assembly.
+    (exec (str "llc " (str tmpdir "program.ll") " -o " (str tmpdir "program.s"))
+          "# LLVM Bitcode to assembly.")
+    ;;Compile and link with runtime.
+    (exec (str "clang " " $(pkg-config --cflags glib-2.0) " (str tmpdir "runtime.c")
+               " " (str tmpdir "program.s -o ") (str tmpdir "program"))
+          "# Compile Failure")
+    ;;Run program.
+    (if (.exists (io/file (str tmpdir "program")))
+      (exec (str tmpdir "program") "# Program build error.\n")
+      (println "Execution Error"))))
 
-(defn clover-compile
-  "Emit given program to assembly and compile with runtime."
-  [expr]
-  (cond
-    (integer? expr)
-    (emit (primitive/compile-fixnum expr))
-    
-    (double? expr)
-    (emit (primitive/compile-double expr))
-    
-    (string? expr)
-    (emit (primitive/compile-string expr))
-    
-    (boolean? expr)
-    (emit (primitive/compile-boolean expr))
-    
-    (nil? expr)
-    (emit (primitive/compile-nil))
-
-    (keyword? expr)
-    (emit (primitive/compile-keyword expr))
-
-    (symbol? expr)
-    (emit (primitive/compile-symbol expr))
-
-    (char? expr)
-    (emit (primitive/compile-chr expr))
-
-    (list? expr)
-    (emit (primitive/compile-defn expr))
-
-    :else (println "Unable to resolve symbol:" expr "in this context")))
