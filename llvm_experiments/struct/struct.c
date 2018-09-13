@@ -1,16 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
-#include <glib-object.h>
+#include <glib.h>
 
-typedef enum { NIL, Integer, Fraction,
-	       String, Boolean, Symbol,
-	       Character, PersistentList,
-	       Function, Keyword } Type;
+typedef enum {
+      NIL,
+      ENV,
+      List,
+      Symbol,
+      String,
+      Keyword,
+      Boolean,
+      Integer,
+      Fraction,
+      Character,
+      EmptyList,
+      Function,
+} Type;
+
+typedef struct Env { struct Env *up; GHashTable *vars; } Env;
 
 typedef struct Obj {
   Type type;
+
   union values {
     long int integer;
     double fraction;
@@ -20,6 +32,24 @@ typedef struct Obj {
     const char *keyword;
     char character;
     int *nil;
+
+    //Function attributes and code.
+    struct {
+      struct Obj (*ptr)(void *root, Env *env, struct Obj *args);
+      struct Obj *params;
+      struct Obj *body;
+      int param_count;
+    } fn;
+
+    //Cons cell
+    struct {
+      Obj *first;
+      Obj *rest;
+    }
+
+    //Environment for the datatype.
+    Env *env;
+
   } Val;
 } Obj;
 
@@ -71,11 +101,6 @@ Obj *createSymbol(char *sym){
   return this;
 }
 
-Obj *createUnaryFunction(){
-  Obj *this = createObj();
-  return this;
-}
-
 Obj *createKeyword(char* key){
   Obj *this = createObj();
   this->type = Keyword;
@@ -87,6 +112,19 @@ Obj *createChar(char c){
   Obj *this = createObj();
   this->type = Character;
   this->Val.character = c;
+  return this;
+}
+
+Obj *cons(char *first){
+  Obj *this = createObj();
+  this->type = List;
+  this->Val.first = *first;
+  this->Val.last = *rest;
+  return this;
+}
+
+Obj *createUnaryFunction(){
+  Obj *this = createObj();
   return this;
 }
 
@@ -166,9 +204,9 @@ Obj *character(char c){
 /* } */
 
 //Character
-Obj *clj_val(){
-  return character('a');
-}
+/* Obj *clj_val(){ */
+  /* return character('a'); */
+/* } */
 
 
 

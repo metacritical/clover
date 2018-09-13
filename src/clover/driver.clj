@@ -19,9 +19,7 @@
   (if (.exists (io/as-file (str tmpdir "program")))
     (io/delete-file (str tmpdir "program"))))
 
-(defn emit [expr] (str (slurp "bitcode/clj-vars.ll") expr))
-
-(defn build-run [clj-vars]
+(defn build-and-run [clj-vars]
   (let [tmpdir (str (System/getProperty "java.io.tmpdir") "_clover_cache/")]
     (if-not (.exists (io/file tmpdir))
       (.mkdir (File. tmpdir)))
@@ -44,5 +42,5 @@
     ;;Run program.
     (if (.exists (io/file (str tmpdir "program")))
       (exec (str tmpdir "program") "# Program build error.\n")
-      (println "Execution Error"))))
+      (println "Execution Error."))))
 

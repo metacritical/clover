@@ -5,10 +5,10 @@
   (:gen-class))
 
 (defn read-build-run [expr]
-  (->
-   (compiler/clover-compile expr)
-   (driver/emit)
-   (driver/build-run)))
+  (-> expr
+   (compiler/emit)
+   (compiler/append)
+   (driver/build-and-run)))
 
 (defn repl []
   (print ">> ")

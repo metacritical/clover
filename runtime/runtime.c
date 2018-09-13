@@ -4,8 +4,18 @@
 #include <glib.h>
 
 typedef enum {
-      NIL, Integer, Fraction, String, Boolean, Symbol, Character, EmptyList,
-      List, Function, Keyword, ENV
+      NIL,
+      ENV,
+      List,
+      Symbol,
+      String,
+      Keyword,
+      Boolean,
+      Integer,
+      Fraction,
+      Character,
+      EmptyList,
+      Function,
 } Type;
 
 typedef struct Env { struct Env *up; GHashTable *vars; } Env;
@@ -23,7 +33,6 @@ typedef struct Obj {
     char character;
     int *nil;
 
-
     //Function attributes and code.
     struct {
       struct Obj (*ptr)(void *root, Env *env, struct Obj *args);
@@ -31,6 +40,12 @@ typedef struct Obj {
       struct Obj *body;
       int param_count;
     } fn;
+
+    //Cons cell
+    struct {
+      Obj *first;
+      Obj *rest;
+    }
 
     //Environment for the datatype.
     Env *env;
@@ -72,7 +87,7 @@ static void print_clj(Obj *obj){
       printf("\\%c\n", obj->Val.character);
       //Unknown
     }else {
-      printf("Unknown Type #< %d >", obj->type);
+      printf("Unknown Type #< %d >\n", obj->type);
     }
 }
 

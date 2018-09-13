@@ -1,37 +1,57 @@
 (ns clover.compiler
-  (:require [clover.primitive :as primitive]))
+  (:require [clover.types.primitive :as prim]
+            [clover.parser :as parser]))
 
-(defn clover-compile
-  "Emit given program to assembly and compile with runtime."
+(defmulti emit 
+  (fn [form]
+    "Emit given program to assembly and compile with runtime."
+    (type form)))
+
+(defmethod emit Long
   [expr]
-  (cond
-    (integer? expr)
-    (primitive/compile-fixnum expr)
+  (prim/emit-long expr))
 
-    (double? expr)
-    (primitive/compile-double expr)
+(defmethod emit Double
+  [expr]
+  (prim/emit-double expr))
 
-    (string? expr)
-    (primitive/compile-string expr)
+(defmethod emit String
+  [expr]
+  (prim/emit-string expr))
 
-    (boolean? expr)
-    (primitive/compile-boolean expr)
+(defmethod emit Boolean
+  [expr]
+  (prim/emit-bool expr))
 
-    (nil? expr)
-    (primitive/compile-nil)
+(defmethod emit nil
+  [expr]
+  (prim/emit-nil))
 
-    (keyword? expr)
-    (primitive/compile-keyword expr)
+(defmethod emit Character
+  [expr]
+  (prim/emit-chr expr))
 
-    (symbol? expr)
-    (primitive/compile-symbol expr)
+(defmethod emit clojure.lang.Keyword
+  [expr]
+  (prim/emit-keyword expr))
 
-    (char? expr)
-    (primitive/compile-chr expr)
+(defmethod emit clojure.lang.PersistentList
+  [expr]
+  (parser/parse-list expr))
 
-    (list? expr)
-    (primitive/compile-defn expr)
+(defmethod emit :default
+  [expr]
+  (prim/emit-symbol expr))
 
-    :else (println "Unable to resolve symbol:" expr "in this context")
-    ;; (throw (Exception. "Fell through"))
-    ))
+;;TODO: Instead of appending link separate prim files.
+(defn append [expr] (str (slurp "src/bitcode/primitives.ll") expr))
+
+;; TODO: There are two ingredients to making a primitive function.
+;; 1. Binding type (def a 2)
+;; 2. Procedure  (fn [x] (+ 1 x))
+;; 3. Both def for binding and lambda for function are created using core
+;; primitive functions in C.
+;; 4. Variadic functions would use C's variadic functionality.
+;; Both of these require an evironment to store the values in FOr now we will
+;; Glib hash table as environment because it has generally good performance
+;; and constant memory usage and complexity in both read and write operations

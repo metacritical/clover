@@ -1,21 +1,20 @@
-(ns clover.llvm-emitter)
+(ns clover.types.primitive)
 
-(defn clj-fixnum [num]
+(defn emit-long [num]
   (str
    "define %struct.Obj* @clj_val() #0 {"
    "  %1 = call %struct.Obj*" "@number(i64 " num ")"
    "  ret %struct.Obj* %1"
    "}"))
 
-(defn clj-bool [bool]
+(defn emit-bool [bool]
   (str
    "define %struct.Obj* @clj_val() #0 {"
    "  %1 = call %struct.Obj* @boolean(i1 zeroext " bool ")"
    "  ret %struct.Obj* %1"
    "}"))
 
-
-(defn clj-str [string]
+(defn emit-string [string]
   (let [len (inc (count string))]
     (str
      "@.str = private unnamed_addr constant [" len " x i8] "
@@ -26,21 +25,21 @@
      "  ret %struct.Obj* %1"
      "}")))
 
-(defn clj-nil []
+(defn emit-nil []
   (str 
    "define %struct.Obj* @clj_val() #0 {"
    "  %1 = call %struct.Obj* @nil()"
    "  ret %struct.Obj* %1"
    "}"))
 
-(defn clj-double [num]
+(defn emit-double [num]
   (str
    "define %struct.Obj* @clj_val() #0 {"
    "  %1 = call %struct.Obj* @fraction(double " num ")"
    "  ret %struct.Obj* %1"
    "}"))
 
-(defn clj-symbol [sym]
+(defn emit-symbol [sym]
   (let [len (inc (count (str sym)))]
     (str
      "@.str = private unnamed_addr constant [" len " x i8] "
@@ -51,7 +50,7 @@
      "  ret %struct.Obj* %1"
      "}")))
 
-(defn clj-keyword [key]
+(defn emit-keyword [key]
   (let [len (inc (count (str ":" (name key))))]
     (str
      "@.str = private unnamed_addr constant [" len " x i8] "
@@ -62,16 +61,13 @@
      "  ret %struct.Obj* %1"
      "}")))
 
-(defn clj-chr [ch]
+(defn emit-chr [ch]
   (str
    "define %struct.Obj* @clj_val() #0 {"
    "%1 = call %struct.Obj* @character(i8 signext " (int ch) ")"
    "ret %struct.Obj* %1"
    "}"))
 
-(defn clj-inc [num]
-  "")
-
-(defn clj-dec [num]
-  "")
+(defn emit-list [lst]
+  (str lst))
 
