@@ -38,14 +38,14 @@ typedef struct Obj {
       struct Obj (*ptr)(void *root, Env *env, struct Obj *args);
       struct Obj *params;
       struct Obj *body;
-      int param_count;
+      int count;
     } fn;
 
     //Cons cell
     struct {
-      Obj *first;
-      Obj *rest;
-    }
+      struct Obj *first;
+      struct Obj *rest;
+    };
 
     //Environment for the datatype.
     Env *env;

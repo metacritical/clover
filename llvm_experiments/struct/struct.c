@@ -38,14 +38,14 @@ typedef struct Obj {
       struct Obj (*ptr)(void *root, Env *env, struct Obj *args);
       struct Obj *params;
       struct Obj *body;
-      int param_count;
+      int count;
     } fn;
 
     //Cons cell
     struct {
       Obj *first;
       Obj *rest;
-    }
+    };
 
     //Environment for the datatype.
     Env *env;
@@ -120,11 +120,6 @@ Obj *cons(char *first){
   this->type = List;
   this->Val.first = *first;
   this->Val.last = *rest;
-  return this;
-}
-
-Obj *createUnaryFunction(){
-  Obj *this = createObj();
   return this;
 }
 

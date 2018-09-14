@@ -1,3 +1,5 @@
-(ns clover.parser)
+(ns clover.parser
+  (:use [clojure.walk]))
 
-(defn parse-list [expr] )
+(defn parse-list [expr]
+  (walk  ))
