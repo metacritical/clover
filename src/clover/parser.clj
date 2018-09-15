@@ -2,4 +2,4 @@
   (:use [clojure.walk]))
 
 (defn parse-list [expr]
-  (walk  ))
+  (walk/postwalk #() expr))

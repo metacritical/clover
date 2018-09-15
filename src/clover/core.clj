@@ -13,7 +13,7 @@
 (defn repl []
   (print ">> ")
   (flush)
-  (let [in (read)]
+  (let [in (read in)]
     (print "=>"(read-build-run in)))
   (recur))
 
