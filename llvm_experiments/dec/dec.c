@@ -8,7 +8,7 @@ long dec(){
   return sub_one(42);
 }
 
-/* int main(){ */
-/*   printf("%d", add_one(42)); */
-/*   return 0; */
-/* } */
+int main(){
+  printf("%d", sub_one(42));
+  return 0;
+}

@@ -1,6 +1,5 @@
 (ns clover.compiler
-  (:require [clover.types.primitive :as prim]
-            [clover.parser :as parser]))
+  (:require [clover.types.primitive :as prim]))
 
 (defmulti emit 
   (fn [form]
@@ -37,7 +36,7 @@
 
 (defmethod emit clojure.lang.PersistentList
   [expr]
-  (parser/parse-list expr))
+  (prim/emit-list))
 
 (defmethod emit :default
   [expr]
