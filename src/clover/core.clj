@@ -20,5 +20,7 @@
   (recur))
 
 (defn -main []
-  (print "Clover 0.0.1 Interactive REPL.\n")
+  (print 
+   "Clover 0.0.1 Interactive REPL.\n"
+   "Commands: :reload, :exit \n")
   (repl))

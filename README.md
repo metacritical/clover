@@ -1,32 +1,11 @@
-# clover
+# Clover
 
-FIXME: description
+Clover is an incremental Native clojure compiler using handwritten LLVM bit code.
+It is based on the ideas in Abdulaziz Ghuloum's paper An Incremental Approach to Compiler Construction and Joel F barletts paper on Scheme-to-C Compiler. 
+Various implementation ideas are inspired from other lisp and scheme 
+implementations namely like minilisp, LYSP and tinyscheme.
 
-## Installation
-
-Download from http://example.com/FIXME.
-
-## Usage
-
-FIXME: explanation
-
-    $ java -jar clover-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+It is very much a Work in Progress... comeback soon.
 
 ## License
 

@@ -1,7 +1,7 @@
 (ns clover.parser
   (:require [clojure.string :as str]
             [clojure.walk :as walk]
-            [clojure.zip :as z]))
+            [clojure.zip :as zip]))
 
 ;; Implement these seqs.
 ;; (1 2 3)
@@ -9,13 +9,18 @@
 ;; (def x 1)
 ;; (fn [x] (x))
 
-(declare parse-list)
+(defmulti parse (fn [form] (type form)))
 
-(defn parse
+(defmethod parse clojure.lang.Keyword
   [expr]
-  (case (seq? expr)
-    true (parse-list expr)
+  (case expr
+    :reload (do (require 'clover.core :reload-all) :ok)
+    :exit (System/exit 0)
     expr))
 
-(defn parse-list [lst]
-  (str "List : "lst))
+(defmethod parse clojure.lang.PersistentList
+  [expr]
+  (let [root (zip/vector-zip (into [] expr))]
+    (str (zip/down root))))
+
+(defmethod parse :default [expr] expr)

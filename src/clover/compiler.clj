@@ -2,8 +2,8 @@
   (:require [clover.types.primitive :as prim]))
 
 (defmulti emit 
+  "Emit given program to assembly and compile with runtime."
   (fn [form]
-    "Emit given program to assembly and compile with runtime."
     (type form)))
 
 (defmethod emit Long
