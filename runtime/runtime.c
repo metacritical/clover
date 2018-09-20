@@ -38,7 +38,7 @@ typedef struct Obj {
       struct Obj (*ptr)(void *root, Env *env, struct Obj *args);
       struct Obj *params;
       struct Obj *body;
-      int count;
+      int arity;
     } fn;
 
     //Cons cell
