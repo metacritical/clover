@@ -34,15 +34,15 @@
   [expr]
   (prim/emit-keyword expr))
 
-(defmethod emit clojure.lang.PersistentList
-  [expr]
-  (prim/emit-list))
-
-(defmethod emit :default
+(defmethod emit clojure.lang.Symbol
   [expr]
   (prim/emit-symbol expr))
 
-;;TODO: Instead of appending link separate prim files.
+(defmethod emit :default ;;clojure.lang.PersistentList
+  [expr]
+  (prim/emit-list expr))
+
+;TODO: Instead of appending link separate prim files.
 (defn append [expr] (str (slurp "src/bitcode/primitives.ll") expr))
 
 ;; TODO: There are two ingredients to making a primitive function.

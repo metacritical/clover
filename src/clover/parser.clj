@@ -10,19 +10,25 @@
 ;; (def x 1)
 ;; (fn [x] (x))
 
-(defn char-map [sym]
-  (get {:<    "_GT_"
-        :>    "_LT_"
-        :=    "_EQ_"
-        :def  "_DEF_"
-        :*    "_STAR_"
-        :+    "_PLUS_"
-        :defn "_FUNC_"
-        :-    "_MINUS_"
-        :/    "_SLASH_"
-        } sym))
+(defn char-map [key]
+  (get {:< "_GT_"
+        :> "_LT_"
+        := "_EQ_"
+        :+ "_PLUS_"
+        :* "_STAR_"
+        :- "_MINUS_"
+        :/ "_SLASH_"} (keyword key)))
 
-(declare parse-list)
+(defn primitive? [key]
+  (if (char-map key) true))
+
+(defn special-map [key]
+  (get {:fn "_LAMBDA_" :def "_BINDING_"} (keyword key)))
+
+(defn special-form? [key]
+  (if (special-map key) true))
+
+(declare parse-list parse-primitives parse-fn)
 
 (defmulti parse (fn [form] (type form)))
 
@@ -35,15 +41,23 @@
 
 (defmethod parse clojure.lang.Cons
   [expr]
-  (parse-list expr))
+  (parse-list (into [] expr)))
 
 (defmethod parse clojure.lang.PersistentList
   [expr]
-  (parse-list expr))
+  (parse-list (into [] expr)))
 
 (defmethod parse :default [expr] expr)
 
 (defn parse-list [expr]
-  (let [root (zip/vector-zip (into [] expr))]
-    (let [ast (zip/down root)]
-      ast)))
+  (let [ast (zip/down (zip/vector-zip expr))]
+    ;; Need a cond-let macro here will add it later.
+    (let [head (zip/node ast)]
+      (cond
+        (primitive? head) (parse-fn ast)
+        (special-form? head) (parse-fn ast)))))
+
+(defn parse-fn
+  ([ast]
+   (let [head (char-map (zip/node ast)) rst (rest ast)]
+     (str "First : " head "\n" "Rest : " rst))))
