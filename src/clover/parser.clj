@@ -63,7 +63,7 @@
   [expr]
   (parse-list (into [] expr)))
 
-(defmethod parse :default [expr] expr)
+(defmethod parse :default [expr] (compiler/emit expr))
 
 ;; Need a cond-let macro here will add it later.
 (defn parse-list [expr]
@@ -76,4 +76,4 @@
 (defn parse-fn
   ([ast]
    (let [head (zip/node ast) rst (rest ast)]
-     (str "First : " head " " "Rest : " rst))))
+     (compiler/emit (str "First : " head " " "Rest : " rst)))))

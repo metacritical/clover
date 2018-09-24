@@ -67,6 +67,3 @@
    "%1 = call %struct.Obj* @character(i8 signext " (int ch) ")"
    "ret %struct.Obj* %1"
    "}"))
-
-(defn emit-list [lst]
-  (str lst))
