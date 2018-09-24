@@ -3,7 +3,18 @@
   (:require [clover.driver :as driver]
             [clover.parser :as parser]
             [clover.compiler :as compiler])
+  (:import [org.jline.reader LineReaderBuilder]
+           [org.jline.terminal TerminalBuilder])
   (:gen-class))
+
+;; (defn term []
+  ;; (.build (.dumb (TerminalBuilder/builder) true)))
+
+;; (defn builder []
+  ;; (LineReaderBuilder/builder))
+
+;; (defn reader []
+  ;; (.readLine (.build (.terminal (builder) (term))) "-> "))
 
 (defn read-build-run [expr]
   (-> expr
@@ -16,7 +27,7 @@
   (print ">> ")
   (flush)
   (let [in (read)]
-    (print "=>"(read-build-run in)))
+    (print "=>" (read-build-run in)))
   (recur))
 
 (defn -main []

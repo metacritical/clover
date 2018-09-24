@@ -11,8 +11,8 @@
 ;; (fn [x] (x))
 
 (defn char-map [key]
-  (get {:< "_GT_"
-        :> "_LT_"
+  (get {:> "_GT_"
+        :< "_LT_"
         := "_EQ_"
         :+ "_PLUS_"
         :* "_STAR_"
@@ -23,7 +23,23 @@
   (if (char-map key) true))
 
 (defn special-map [key]
-  (get {:fn "_LAMBDA_" :def "_BINDING_"} (keyword key)))
+  (get {:fn "_LAMBDA_"
+        :def "_BINDING_"
+        :defn "_FUNCTION_"
+        :for "_FOR_"
+        :if "_IF_"
+        :do "_DO_"
+        :let "_LET_"
+        :quote "_QUOTE_"
+        :var "_VAR_"
+        :loop "_LOOP_"
+        :recur "_RECUR_"
+        :throw "_THROW_"
+        :try "_TRY_"
+        :. "_DOT_"
+        :new "_NEW_"
+        :set! "_SET_"
+        } (keyword key)))
 
 (defn special-form? [key]
   (if (special-map key) true))
@@ -49,9 +65,9 @@
 
 (defmethod parse :default [expr] expr)
 
+;; Need a cond-let macro here will add it later.
 (defn parse-list [expr]
   (let [ast (zip/down (zip/vector-zip expr))]
-    ;; Need a cond-let macro here will add it later.
     (let [head (zip/node ast)]
       (cond
         (primitive? head) (parse-fn ast)
@@ -59,5 +75,5 @@
 
 (defn parse-fn
   ([ast]
-   (let [head (char-map (zip/node ast)) rst (rest ast)]
-     (str "First : " head "\n" "Rest : " rst))))
+   (let [head (zip/node ast) rst (rest ast)]
+     (str "First : " head " " "Rest : " rst))))
