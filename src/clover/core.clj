@@ -11,19 +11,26 @@
 (defn read-build-run [expr]
   (-> expr
    (parser/parse)
-   (compiler/emit)
    (append)
    (driver/build-and-run)))
+
+(defn spcl-cmd [in]
+  (cond (keyword? in)
+    (case in
+      :reload (do (require 'clover.core :reload-all) :ok!)
+      :exit (System/exit 0)
+      in)
+    :else in))
 
 (defn repl []
   (print ">> ")
   (flush)
-  (let [in (read)]
+  (let [in (spcl-cmd (read))]
     (print "=>" (read-build-run in)))
   (recur))
 
 (defn -main []
-  (print 
+  (print
    "Clover 0.0.1 Interactive REPL.\n"
    "Commands: :reload, :exit \n")
   (repl))

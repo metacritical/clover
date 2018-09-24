@@ -10,7 +10,7 @@
 ;; (def x 1)
 ;; (fn [x] (x))
 
-(defn char-map [key]
+(defn unary-map [key]
   (get {:> "_GT_"
         :< "_LT_"
         := "_EQ_"
@@ -20,7 +20,7 @@
         :/ "_SLASH_"} (keyword key)))
 
 (defn primitive? [key]
-  (if (char-map key) true))
+  (if (unary-map key) true))
 
 (defn special-map [key]
   (get {:fn "_LAMBDA_"
@@ -50,10 +50,7 @@
 
 (defmethod parse clojure.lang.Keyword
   [expr]
-  (case expr
-    :reload (do (require 'clover.core :reload-all) :ok)
-    :exit (System/exit 0)
-    expr))
+  (compiler/emit expr))
 
 (defmethod parse clojure.lang.Cons
   [expr]
