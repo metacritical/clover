@@ -1,8 +1,5 @@
 (ns clover.parser
-  (:require [clojure.zip :as zip]
-            [clojure.walk :as walk]
-            [clojure.string :as str]
-            [clover.compiler :as compiler]))
+  (:require [clover.compiler :as compiler]))
 
 ;; Implement these seqs.
 ;; (1 2 3)
@@ -10,22 +7,19 @@
 ;; (def x 1)
 ;; (fn [x] (x))
 
-(defn unary-map [key]
+(defn core-map [key]
   (get {:> "_GT_"
         :< "_LT_"
         := "_EQ_"
         :+ "_PLUS_"
         :* "_STAR_"
         :- "_MINUS_"
-        :/ "_SLASH_"} (keyword key)))
-
-(defn primitive? [key]
-  (if (unary-map key) true))
-
-(defn special-map [key]
-  (get {:fn "_LAMBDA_"
+        :/ "_SLASH_"
+        :fn "_LAMBDA_"
         :def "_BINDING_"
         :defn "_FUNCTION_"
+        :cons "_CONS_"
+        :conj "_CONJ_"
         :for "_FOR_"
         :if "_IF_"
         :do "_DO_"
@@ -41,8 +35,8 @@
         :set! "_SET_"
         } (keyword key)))
 
-(defn special-form? [key]
-  (if (special-map key) true))
+(defn reserved? [key]
+  (if (core-map key) true))
 
 (declare parse-list parse-primitives parse-fn)
 
@@ -53,24 +47,23 @@
   (compiler/emit expr))
 
 (defmethod parse clojure.lang.Cons
-  [expr]
-  (parse-list (into [] expr)))
+  [[head & rst]]
+  (compiler/emit (cons head rst)))
 
 (defmethod parse clojure.lang.PersistentList
   [expr]
-  (parse-list (into [] expr)))
+  (let [[head & rst] expr]
+    (cond
+      (reserved? head) (compiler/emit rst (keyword head))
+      :else (compiler/emit expr))))
 
 (defmethod parse :default [expr] (compiler/emit expr))
 
 ;; Need a cond-let macro here will add it later.
-(defn parse-list [expr]
-  (let [ast (zip/down (zip/vector-zip expr))]
-    (let [head (zip/node ast)]
-      (cond
-        (primitive? head) (parse-fn ast)
-        (special-form? head) (parse-fn ast)))))
-
-(defn parse-fn
-  ([ast]
-   (let [head (zip/node ast) rst (rest ast)]
-     (compiler/emit (str "First : " head " " "Rest : " rst)))))
+;; (defn parse-list [expr]
+  ;; (let [ast (zip/down (zip/vector-zip expr))]
+    ;; (let [head (zip/node ast)]
+      ;; (println ast)
+      ;; (cond
+        ;; (primitive? head) (compiler/emit ast (prim-map head))
+        ;; (special-form? head) (compiler/emit ast (keyword head))))))

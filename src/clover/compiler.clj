@@ -1,11 +1,14 @@
 (ns clover.compiler
-  (:require [clover.types.primitive :as prim]
+  (:require [clojure.zip :as zip]
+            [clojure.walk :as walk]
+            [clover.types.primitive :as prim]
             [clover.types.special-forms :as special]))
 
-(defmulti emit 
+(defmulti emit
   "Emit given program to assembly and compile with runtime."
-  (fn [form]
-    (type form)))
+  (fn var-dispatch
+    ([form] (type form))
+    ([form signature] [(type form) signature])))
 
 (defmethod emit Long
   [expr]
@@ -39,6 +42,18 @@
   [expr]
   (prim/emit-symbol expr))
 
-(defmethod emit :default ;;clojure.lang.PersistentList
+(defmethod emit clojure.lang.Cons
+  [expr]
+  (special/emit-cons expr))
+
+(defmethod emit clojure.lang.PersistentList
   [expr]
   (special/emit-list expr))
+
+(defmethod emit [clojure.lang.PersistentList :def]
+  [expr sign]
+  (special/emit-def expr))
+
+(defmethod emit [clojure.lang.PersistentList :fn]
+  [expr sign]
+  (special/emit-fn expr))
