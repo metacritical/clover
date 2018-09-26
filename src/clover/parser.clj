@@ -1,42 +1,14 @@
 (ns clover.parser
   (:require [clover.compiler :as compiler]))
 
-;; Implement these seqs.
-;; (1 2 3)
-;; (+ 1 2 3)
-;; (def x 1)
-;; (fn [x] (x))
-
-(defn core-map [key]
-  (get {:> "_GT_"
-        :< "_LT_"
-        := "_EQ_"
-        :+ "_PLUS_"
-        :* "_STAR_"
-        :- "_MINUS_"
-        :/ "_SLASH_"
-        :fn "_LAMBDA_"
-        :def "_BINDING_"
-        :defn "_FUNCTION_"
-        :cons "_CONS_"
-        :conj "_CONJ_"
-        :for "_FOR_"
-        :if "_IF_"
-        :do "_DO_"
-        :let "_LET_"
-        :quote "_QUOTE_"
-        :var "_VAR_"
-        :loop "_LOOP_"
-        :recur "_RECUR_"
-        :throw "_THROW_"
-        :try "_TRY_"
-        :. "_DOT_"
-        :new "_NEW_"
-        :set! "_SET_"
-        } (keyword key)))
+(def core-map
+  #{:> :< := :+ :* :- :/ :fn :def :defn
+    :cons :conj :for :if :do :let :quote
+    :var :loop :recur :throw :try :. :new
+    :set!})
 
 (defn reserved? [key]
-  (if (core-map key) true))
+  (contains? core-map (keyword key)))
 
 (declare parse-list parse-primitives parse-fn)
 
@@ -58,6 +30,12 @@
       :else (compiler/emit expr))))
 
 (defmethod parse :default [expr] (compiler/emit expr))
+
+;; Implement these seqs.
+;; (1 2 3)
+;; (+ 1 2 3)
+;; (def x 1)
+;; (fn [x] (x))
 
 ;; Need a cond-let macro here will add it later.
 ;; (defn parse-list [expr]
