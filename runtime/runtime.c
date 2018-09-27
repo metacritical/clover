@@ -92,6 +92,8 @@ static void print_clj(Obj *obj){
 }
 
 int main(int argc, char** argv){
+  GHashTable* env = g_hash_table_new(g_str_hash, g_str_equal);
+  g_hash_table_insert(env, "*ns*", "user");
   print_clj(clj_val());
   return 0;
 }
