@@ -37,10 +37,9 @@
           "# LLVM Bitcode to assembly.")
     ;;Compile and link with runtime.
     (exec (str "clang " " $(pkg-config --cflags glib-2.0) " (str tmpdir "runtime.c")
-               " " (str tmpdir "program.s -o ") (str tmpdir "program"))
-          "# Compile Failure")
+               " " (str tmpdir "program.s") " -lglib-2.0 -o "
+               (str tmpdir "program")) "# Compile Failure")
     ;;Run program.
     (if (.exists (io/file (str tmpdir "program")))
       (exec (str tmpdir "program") "# Program build error.\n")
       (println "Execution Error."))))
-

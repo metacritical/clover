@@ -52,8 +52,7 @@
 
 (defmethod emit [clojure.lang.PersistentList :def]
   [expr sign]
-  (special/emit-def expr)
-  )
+  (special/emit-def expr))
 
 (defmethod emit [clojure.lang.PersistentList :fn]
   [expr sign]
