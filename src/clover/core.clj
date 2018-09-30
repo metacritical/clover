@@ -1,5 +1,6 @@
 (ns clover.core
-  (:use [clojure.core])
+  (:use [clojure.core]
+        [clojure.java.io :as io])
   (:require [clover.driver :as driver]
             [clover.parser :as parser]
             [clover.repl.readline :as readline])
@@ -17,7 +18,19 @@
 (defn spcl-cmd [in]
   (cond (keyword? in)
     (case in
-      :reload (do (require 'clover.core :reload-all) :ok!)
+      :reload
+      (do (require 'clover.core :reload-all) :ok!)
+
+      :cleanup
+      (do
+        (let [tmpdir (str (System/getProperty "java.io.tmpdir")
+                          "_clover_cache/")]
+          (if (.exists (io/as-file (str tmpdir "program")))
+            (do
+              (io/delete-file (str tmpdir "program"))
+              (io/delete-file (str tmpdir "runtime.c"))
+              (io/delete-file (str tmpdir "runtime.h"))))))
+
       :exit (System/exit 0)
       in)
     :else in))
@@ -32,7 +45,7 @@
 (defn -main []
   (print
    "Clover 0.0.1 Interactive REPL.\n"
-   "Commands: :reload, :exit \n")
+   "Commands: :reload, :cleanup, :exit \n")
   (repl))
 
 

@@ -1,6 +1,7 @@
 %struct.Obj = type { i32, %union.values }
 %union.values = type { %struct.anon }
 %struct.anon = type { {}*, %struct.Obj*, %struct.Obj*, i32 }
+%struct._GHashTable = type opaque
 
 ; Function Attrs: noinline nounwind optnone ssp uwtable
 define %struct.Obj* @createObj() #0 {
@@ -140,15 +141,6 @@ define %struct.Obj* @createSymbol(i8*) #0 {
   store i8* %7, i8** %10, align 8
   %11 = load %struct.Obj*, %struct.Obj** %3, align 8
   ret %struct.Obj* %11
-}
-
-; Function Attrs: noinline nounwind optnone ssp uwtable
-define %struct.Obj* @createUnaryFunction() #0 {
-  %1 = alloca %struct.Obj*, align 8
-  %2 = call %struct.Obj* @createObj()
-  store %struct.Obj* %2, %struct.Obj** %1, align 8
-  %3 = load %struct.Obj*, %struct.Obj** %1, align 8
-  ret %struct.Obj* %3
 }
 
 ; Function Attrs: noinline nounwind optnone ssp uwtable

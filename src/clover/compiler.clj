@@ -48,12 +48,20 @@
 
 (defmethod emit clojure.lang.PersistentList
   [expr]
-  (special/emit-list expr))
+  (special/emit-list (first expr) (rest expr)))
+
+(defmethod emit clojure.lang.PersistentList$EmptyList
+  [expr]
+  (prim/emit-nil))
 
 (defmethod emit [clojure.lang.PersistentList :def]
   [expr sign]
-  (special/emit-def expr))
+  (special/emit-def (emit sign) (emit expr)))
 
 (defmethod emit [clojure.lang.PersistentList :fn]
   [expr sign]
   (special/emit-fn expr))
+
+(defmethod emit :default
+  [expr]
+  (prim/emit-symbol expr))

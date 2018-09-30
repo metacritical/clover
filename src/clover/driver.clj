@@ -31,6 +31,7 @@
     (spit (str tmpdir "program.ll") clj-vars)
     ;; Copies runtime to temp directory.
     (io/copy (io/file "runtime/runtime.c") (io/file (str tmpdir "runtime.c")))
+    (io/copy (io/file "runtime/runtime.h") (io/file (str tmpdir "runtime.h")))
 
     ;;Compile emitted bitcode to assembly.
     (exec (str "llc " (str tmpdir "program.ll") " -o " (str tmpdir "program.s"))

@@ -43,8 +43,8 @@ typedef struct Obj {
 
     //Cons cell
     struct {
-      Obj *first;
-      Obj *rest;
+      struct Obj *first;
+      struct Obj *rest;
     };
 
     //Environment for the datatype.
@@ -115,16 +115,8 @@ Obj *createChar(char c){
   return this;
 }
 
-Obj *cons(char *first){
-  Obj *this = createObj();
-  this->type = List;
-  this->Val.first = *first;
-  this->Val.last = *rest;
-  return this;
-}
-
-Obj *number(long int n){
-  Obj *numb = createInteger(n);
+Obj *number(long int num){
+  Obj *numb = createInteger(num);
   return numb;
 }
 
@@ -163,8 +155,16 @@ Obj *character(char c){
   return chr;
 }
 
+/* Obj *def(Obj *key, Obj *val){ */
+/* } */
+
 //Number 
 /* Obj *clj_val(){ */
+  /* return number(42); */
+/* } */
+
+//New Number
+/* Obj *clj_val(GHashTable *env){ */
   /* return number(42); */
 /* } */
 
@@ -203,6 +203,8 @@ Obj *character(char c){
   /* return character('a'); */
 /* } */
 
-
+/* Obj *clj_val(Obj *env){ */
+  /* return def(); */
+/* } */
 
 
