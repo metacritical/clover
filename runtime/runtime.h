@@ -48,4 +48,5 @@ typedef struct Obj {
   } Val;
 } Obj;
 
-Obj *clj_val();
+Obj *clj_val(GHashTable *env);
+Obj *createString(char *str);

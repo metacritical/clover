@@ -1,5 +1,6 @@
 (ns clover.parser
-  (:require [clover.compiler :as compiler]))
+  (:require [clover.types.primitive :as prim]
+            [clover.types.special-forms :as special]))
 
 (def core-map
   #{:> :< := :+ :* :- :/ :fn :def :defn
@@ -7,29 +8,93 @@
     :var :loop :recur :throw :try :. :new
     :set!})
 
-(defn reserved? [key]
-  (contains? core-map (keyword key)))
+(defmulti parse
+  "Parse and emit given program to assembly and compile with runtime."
+  (fn var-dispatch
+    ([form] (type form))
+    ([form signature] [(type form) signature])))
 
-(declare parse-list parse-primitives parse-fn)
+(defmethod parse Long
+  [expr]
+  (prim/emit-long expr))
 
-(defmulti parse (fn [form] (type form)))
+(defmethod parse Double
+  [expr]
+  (prim/emit-double expr))
+
+(defmethod parse String
+  [expr]
+  (prim/emit-string expr))
+
+(defmethod parse Boolean
+  [expr]
+  (prim/emit-bool expr))
+
+(defmethod parse nil
+  [expr]
+  (prim/emit-nil))
+
+(defmethod parse Character
+  [expr]
+  (prim/emit-chr expr))
 
 (defmethod parse clojure.lang.Keyword
   [expr]
-  (compiler/emit expr))
+  (prim/emit-keyword expr))
+
+(defmethod parse clojure.lang.Symbol
+  [expr]
+  (prim/emit-symbol expr))
 
 (defmethod parse clojure.lang.Cons
-  [[head & rst]]
-  (compiler/emit (cons head rst)))
+  [expr]
+  (special/emit-cons expr))
 
 (defmethod parse clojure.lang.PersistentList
   [expr]
-  (let [[head & rst] expr]
-    (cond
-      (reserved? head) (compiler/emit rst (keyword head))
-      :else (compiler/emit expr))))
+  (special/emit-list (first expr) (rest expr)))
 
-(defmethod parse :default [expr] (compiler/emit expr))
+(defmethod parse clojure.lang.PersistentList$EmptyList
+  [expr]
+  (prim/emit-nil))
+
+(defmethod parse [clojure.lang.PersistentList :def]
+  [expr sign]
+  (special/emit-def (parse sign) (parse expr)))
+
+(defmethod parse [clojure.lang.PersistentList :fn]
+  [expr sign]
+  (special/emit-fn expr))
+
+(defmethod parse :default
+  [expr]
+  (prim/emit-symbol expr))
+
+
+
+;; (defn reserved? [key]
+  ;; (contains? core-map (keyword key)))
+
+;; (declare parse-list parse-primitives parse-fn)
+
+;; (defmulti parse (fn [form] (type form)))
+
+;; (defmethod parse clojure.lang.Keyword
+  ;; [expr]
+  ;; (compiler/emit expr))
+
+;; (defmethod parse clojure.lang.Cons
+  ;; [[head & rst]]
+  ;; (compiler/emit (cons head rst)))
+
+;; (defmethod parse clojure.lang.PersistentList
+  ;; [expr]
+  ;; (let [[head & rst] expr]
+    ;; (cond
+      ;; (reserved? head) (compiler/emit rst (keyword head))
+      ;; :else (compiler/emit expr))))
+
+;; (defmethod parse :default [expr] (compiler/emit expr))
 
 ;; Implement these seqs.
 ;; (1 2 3)

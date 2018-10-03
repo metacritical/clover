@@ -45,6 +45,7 @@ int main(int argc, char** argv){
   GHashTable* core_ns = g_hash_table_new(g_str_hash, g_str_equal);
   g_hash_table_insert(core_ns, "*ns*", "clojure.core");
   g_hash_table_insert(namespaces, "clojure.core", core_ns);
+
   print_clj(clj_val(core_ns));
   return 0;
 }
