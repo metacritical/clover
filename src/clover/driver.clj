@@ -15,17 +15,28 @@
         (printf (str "\033[31;1m" (sh-out :err) "\033[0m"))
         err-msg))))
 
-(defn cache-cleanup [tmpdir]
-  (if (.exists (io/as-file (str tmpdir "program")))
-    (io/delete-file (str tmpdir "program"))))
+(defn temp-dir []
+  (str (System/getProperty "java.io.tmpdir") "_clover_cache/"))
+
+(defn cleanup [file]
+  (let [tmpdir (temp-dir)]
+    (if (.exists (io/as-file (str tmpdir file)))
+      (io/delete-file (str tmpdir file)))))
+
+(defn cache-cleanup []
+  ;; Delete Previous program file
+  (cleanup "program")
+  (cleanup "program.ll")
+  (cleanup "program.s")
+  (cleanup "runtime.c")
+  (cleanup "runtime.h"))
 
 (defn build-and-run [clj-vars]
-  (let [tmpdir (str (System/getProperty "java.io.tmpdir") "_clover_cache/")]
+  (let [tmpdir (temp-dir)]
     (if-not (.exists (io/file tmpdir))
       (.mkdir (File. tmpdir)))
 
-    ;; Delete Previous program file
-    (cache-cleanup (str tmpdir "program"))
+    (cache-cleanup)
 
     ;; Spits clj-vars + expr bit code program file.
     (spit (str tmpdir "program.ll") clj-vars)
@@ -34,13 +45,14 @@
     (io/copy (io/file "runtime/runtime.h") (io/file (str tmpdir "runtime.h")))
 
     ;;Compile emitted bitcode to assembly.
-    (exec (str "llc " (str tmpdir "program.ll") " -o " (str tmpdir "program.s"))
-          "# LLVM Bitcode to assembly.")
+    (if (.exists (io/as-file (str tmpdir "program.ll")))
+      (exec (str "llc " (str tmpdir "program.ll") " -o " (str tmpdir "program.s"))
+            "# LLVM Bitcode to assembly."))
     ;;Compile and link with runtime.
-    (exec (str "clang " " $(pkg-config --cflags glib-2.0) " (str tmpdir "runtime.c")
-               " " (str tmpdir "program.s") " -lglib-2.0 -o "
-               (str tmpdir "program")) "# Compile Failure")
+    (if (.exists (io/as-file (str tmpdir "program.s")))
+      (exec (str "clang " " $(pkg-config --cflags glib-2.0) "
+                 (str tmpdir "runtime.c") " "
+                 (str tmpdir "program.s") " -lglib-2.0 -o "
+               (str tmpdir "program")) "# Compile Failure"))
     ;;Run program.
-    (if (.exists (io/file (str tmpdir "program")))
-      (exec (str tmpdir "program") "# Program build error.\n")
-      (println "Execution Error."))))
+    (exec (str tmpdir "program") "# Program build error.\n")))

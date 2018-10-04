@@ -1,6 +1,11 @@
 (ns clover.parser
-  (:require [clover.types.primitive :as prim]
-            [clover.types.special-forms :as special]))
+  (:require [clojure.pprint :as pp]
+            [clojure.tools.analyzer :as ana]
+            [clover.types.primitive :as prim]
+            [clojure.tools.analyzer.ast :as ast]
+            [clojure.tools.analyzer.env :as env]
+            [clover.types.special-forms :as special]
+            [clojure.tools.analyzer.jvm :as anal.jvm]))
 
 (def core-map
   #{:> :< := :+ :* :- :/ :fn :def :defn
@@ -68,7 +73,7 @@
 
 (defmethod parse :default
   [expr]
-  (prim/emit-symbol expr))
+  (pp/pprint (ast/nodes (anal.jvm/analyze expr))))
 
 
 

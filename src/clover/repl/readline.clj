@@ -10,4 +10,3 @@
 
 (defn reader []
   (.readLine (.build (.terminal (builder) (term))) "-> "))
-

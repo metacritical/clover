@@ -11,26 +11,18 @@
 
 (defn read-build-run [expr]
   (-> expr
-   (parser/parse)
-   (append)
-   (driver/build-and-run)))
+      (parser/parse)
+      (append)
+      (driver/build-and-run)))
+
+(defn -reload-all []
+  (do (require 'clover.core :reload-all) :ok!))
 
 (defn spcl-cmd [in]
   (cond (keyword? in)
     (case in
-      :reload
-      (do (require 'clover.core :reload-all) :ok!)
-
-      :cleanup
-      (do
-        (let [tmpdir (str (System/getProperty "java.io.tmpdir")
-                          "_clover_cache/")]
-          (if (.exists (io/as-file (str tmpdir "program")))
-            (do
-              (io/delete-file (str tmpdir "program"))
-              (io/delete-file (str tmpdir "runtime.c"))
-              (io/delete-file (str tmpdir "runtime.h"))))))
-
+      :reload (-reload-all)
+      :cleanup (driver/cache-cleanup)
       :exit (System/exit 0)
       in)
     :else in))
