@@ -1,3 +1,4 @@
 [submodule "mjolnir"]
 	path = mjolnir
 	url = git@github.com:halgari/mjolnir.git
+	ignore = dirty
