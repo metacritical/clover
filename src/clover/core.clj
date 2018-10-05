@@ -10,6 +10,7 @@
 (defn append [expr] (str (slurp "src/bitcode/primitives.ll") expr))
 
 (defn read-build-run [expr]
+  ;; (parser/analyze expr)
   (-> expr
       (parser/parse)
       (append)

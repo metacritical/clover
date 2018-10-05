@@ -3,4 +3,5 @@
 
 (defn reader []
   (let [cr (ConsoleReader.) line (.readLine cr ">> ")]
-    line))
+    (if (= line "")
+      (recur) line)))

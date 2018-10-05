@@ -14,8 +14,16 @@
     :set!})
 
 
-(defn analyze [expr]
-  (pp/pprint (ast/nodes (anal.jvm/analyze expr))))
+;; (defn analyze [expr]
+;;   (let [nodes (ast/children (anal.jvm/analyze expr))]
+;;     (loop [[frst & rst] nodes]
+;;       (if (empty? rst)
+;;         (pp/pprint frst)
+;;         (do
+;;           (pp/pprint frst)
+;;           (println "-----------------------------------")
+;;           (recur rst))))))
+
 
 (defmulti parse
   "Parse and emit given program to assembly and compile with runtime."
