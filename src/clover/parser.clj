@@ -13,6 +13,10 @@
     :var :loop :recur :throw :try :. :new
     :set!})
 
+
+(defn analyze [expr]
+  (pp/pprint (ast/nodes (anal.jvm/analyze expr))))
+
 (defmulti parse
   "Parse and emit given program to assembly and compile with runtime."
   (fn var-dispatch
@@ -70,12 +74,6 @@
 (defmethod parse [clojure.lang.PersistentList :fn]
   [expr sign]
   (special/emit-fn expr))
-
-(defmethod parse :default
-  [expr]
-  (pp/pprint (ast/nodes (anal.jvm/analyze expr))))
-
-
 
 ;; (defn reserved? [key]
   ;; (contains? core-map (keyword key)))

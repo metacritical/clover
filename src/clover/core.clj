@@ -18,19 +18,19 @@
 (defn -reload-all []
   (do (require 'clover.core :reload-all) :ok!))
 
-(defn spcl-cmd [in]
-  (cond (keyword? in)
-    (case in
-      :reload (-reload-all)
-      :cleanup (driver/cache-cleanup)
-      :exit (System/exit 0)
-      in)
-    :else in))
+(defn spcl-cmd [line]
+  (let [in (read-string line)]
+    (cond (keyword? in)
+          (case in
+            :reload (-reload-all)
+            :cleanup (driver/cache-cleanup)
+            :exit (System/exit 0)
+            in)
+          :else in)))
 
 (defn repl []
-  (print ">> ")
   (flush)
-  (let [in (spcl-cmd (read))]
+  (let [in (spcl-cmd (readline/reader))]
     (print "=>" (read-build-run in)))
   (recur))
 
