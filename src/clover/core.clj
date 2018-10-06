@@ -10,11 +10,12 @@
 (defn append [expr] (str (slurp "src/bitcode/primitives.ll") expr))
 
 (defn read-build-run [expr]
-  ;; (parser/analyze expr)
-  (-> expr
-      (parser/parse)
-      (append)
-      (driver/build-and-run)))
+  (parser/analyze expr)
+  ;; (-> expr
+      ;; (parser/parse)
+      ;; (append)
+      ;; (driver/build-and-run))
+  )
 
 (defn -reload-all []
   (do (require 'clover.core :reload-all) :ok!))
