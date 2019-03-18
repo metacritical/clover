@@ -12,6 +12,10 @@
 
 (declare parse-list parse-primitives parse-fn)
 
+;; TODO
+;; Should implement some kind of Hindley-Milner Type Inference system
+;; For parsing these types more efficiently.
+
 (defmulti parse (fn [form] (type form)))
 
 (defmethod parse clojure.lang.Keyword

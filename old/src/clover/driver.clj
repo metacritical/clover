@@ -29,6 +29,7 @@
 
     ;; Spits clj-vars + expr bit code program file.
     (spit (str tmpdir "program.ll") clj-vars)
+    
     ;; Copies runtime to temp directory.
     (io/copy (io/file "runtime/runtime.c") (io/file (str tmpdir "runtime.c")))
 
@@ -36,9 +37,8 @@
     (exec (str "llc " (str tmpdir "program.ll") " -o " (str tmpdir "program.s"))
           "# LLVM Bitcode to assembly.")
     ;;Compile and link with runtime.
-    (exec (str "clang " " $(pkg-config --cflags glib-2.0) " (str tmpdir "runtime.c")
-               " " (str tmpdir "program.s") " -lglib-2.0 -o "
-               (str tmpdir "program")) "# Compile Failure")
+    (exec (str "clang " " $(pkg-config --cflags glib-2.0) " "$(pkg-config --libs glib-2.0)" " -lglib-2.0 "  (str tmpdir "runtime.c")
+               " " (str tmpdir "program.s") " -o " (str tmpdir "program")) "# Compile Failure")
     ;;Run program.
     (if (.exists (io/file (str tmpdir "program")))
       (exec (str tmpdir "program") "# Program build error.\n")

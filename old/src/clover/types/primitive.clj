@@ -1,5 +1,8 @@
 (ns clover.types.primitive)
 
+;;TODO : The inline emitter code with Static IR should be defined
+;; with clojure native functions.
+
 (defn emit-long [num]
   (str
    "define %struct.Obj* @clj_val() #0 {"

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <glib.h>
+// Replace glib with a fast Hash Table implementation from here
+// https://github.com/exebook/hashdict.c
 
 typedef enum {
       NIL,
