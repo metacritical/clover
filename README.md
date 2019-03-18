@@ -1,4 +1,4 @@
-# Clover
+# Clover 🔨🧲🧱 (Work In Progress)
 
 Clover is an incremental Native clojure compiler using handwritten LLVM bit code.
 It is based on the ideas in Abdulaziz Ghuloum's paper An Incremental Approach to Compiler Construction and Joel F barletts paper on Scheme-to-C Compiler. 
