@@ -43,11 +43,10 @@ namespace clover::lang {
 
     //TODO: Implement synchronized in C++ for bindRoot function.
     void bindRoot(Object root){
-      int _rev = this->rev;
       //validate(getValidator(), root);
       Object oldroot = this->root;
       this->root = root;
-      ++_rev;
+      ++Var::rev;
       //alterMeta(dissoc, RT.list(macroKey));
       //notifyWatches(oldroot,this.root);
     }

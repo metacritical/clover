@@ -5,6 +5,7 @@
 namespace clover::lang{
 
   bool Var::dynamic = false;
+  int Var::rev = 0;
 
   Var::Var(Namespace ns, Symbol sym) : ns(ns), sym(sym){
     this->ns = ns;
