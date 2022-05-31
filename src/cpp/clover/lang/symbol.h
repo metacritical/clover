@@ -6,6 +6,7 @@
 #include <map>
 #include "object.h"
 #include "arity_exception.h"
+#include "util.h"
 
 namespace clover::lang{
   using std::string;
@@ -45,10 +46,11 @@ namespace clover::lang{
 
     struct SymHash{
       size_t operator()(const Symbol& sym) const{
-        // size_t h1 = std::hash<std::string>()(sym.getName());
-        // size_t h2 = std::hash<std::string>()(sym.getNameSpace()) << 1;
-        // return h1 ^ h2;
-        return sym.hashCode();
+        size_t h1 = std::hash<std::string>()(sym.getName());
+        size_t h2 = std::hash<std::string>()(sym.getNameSpace());
+        // std::cout << "Carroted " << (h1 ^ h2) << std::endl;
+        // std::cout << "Combined " <<  Util::combinedHashCode(std::to_string(h1), std::to_string(h2)) << std::endl;
+        return Util::combinedHashCode(std::to_string(h1), std::to_string(h2));
       }
     };
 

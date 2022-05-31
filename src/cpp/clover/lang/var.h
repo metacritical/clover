@@ -51,6 +51,10 @@ namespace clover::lang {
       //notifyWatches(oldroot,this.root);
     }
 
+    Object deref(){
+      return root;
+    }
+
     friend std::ostream& operator<<(std::ostream& os, Var& v){
       if(v.ns.getName().toString().empty())
         return os << "#<Var: " + (!v.sym.getName().empty() ? v.sym.getName() : "--unnamed--") + ">";

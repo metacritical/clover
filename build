@@ -1,4 +1,5 @@
 INCLUDEDIR=src/cpp/clover/lang/
-g++ -c main.cpp -I $INCLUDEDIR $INCLUDEDIR/*.cpp -std=c++17 -Wstring-plus-int -Wnull-conversion
-g++ *.o -o clover
+g++ -Ofast -c main.cpp -I $INCLUDEDIR $INCLUDEDIR/*.cpp -std=c++17 -Wstring-plus-int -Wnull-conversion
+mv *.o obj/
+g++ -Ofast obj/*.o -o clover
 

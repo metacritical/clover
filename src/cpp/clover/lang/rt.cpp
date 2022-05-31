@@ -15,7 +15,8 @@ namespace clover::lang{
   }
 
   Var RT::var(string ns, string name, Object init){
-    return Var::intern(Namespace::findOrCreate(Symbol::intern(NULL, ns)), Symbol::intern(NULL, name), init);
+    Namespace ns_found = Namespace::findOrCreate(Symbol::intern(NULL, ns));
+    return Var::intern(ns_found, Symbol::intern(NULL, name), init);
   }
 
   void RT::init() {
