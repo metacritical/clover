@@ -3,13 +3,13 @@
 #include "namespace.h"
 
 namespace clover::lang{
-
   bool Var::dynamic = false;
   int Var::rev = 0;
 
   Var::Var(Namespace ns, Symbol sym) : ns(ns), sym(sym){
     this->ns = ns;
     this->sym = sym;
+    this->root = Unbound(Var(ns,sym));
   }
 
   Var Var::intern(Namespace ns, Symbol sym){
@@ -43,4 +43,7 @@ namespace clover::lang{
     return *this;
   }
 
+  string Var::toString(){
+    return "#'" + this->ns.toString() + "/" + this->sym.getName();
+  }
 }

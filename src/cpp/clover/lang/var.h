@@ -6,8 +6,13 @@
 #include "symbol.h"
 #include "namespace.h"
 #include "util.h"
+#include "afn.h"
+#include <functional>
+#include "unbound.h"
 
 namespace clover::lang {
+  using namespace std;
+
   template<typename Base, typename T> inline bool instanceof(const T *ptr) {
     return dynamic_cast<const Base*>(ptr) != nullptr;
   }
@@ -15,7 +20,7 @@ namespace clover::lang {
   class Var : public Object{
     Namespace ns;
     Symbol sym;
-    Object root;
+    Unbound root;
 
   public:
     static int rev;
@@ -36,9 +41,22 @@ namespace clover::lang {
 
     Var setDynamic();
     Var setDynamic(bool b);
+    string toString();
 
     bool hasRoot(){
       return !(instanceof<Object>(&(this->root)));
+    }
+
+    Object fn(){
+      return deref();
+    }
+
+    Object invoke() {
+      return this->root.invoke();
+    }
+
+    Object invoke(Object arg1) {
+      return this->root.invoke(arg1);
     }
 
     //TODO: Implement synchronized in C++ for bindRoot function.
@@ -68,8 +86,5 @@ namespace clover::lang {
     }
   };
 };
-
-
-#include "unbound.h"
 
 #endif

@@ -11,7 +11,9 @@ namespace clover::lang{
   bool RT::INIT = false;
   
   Var RT::var(string ns, string name){
-    return Var::intern(Symbol::intern(ns), Symbol::intern(name));
+    Symbol ns_sym = Symbol::intern(NULL, ns);
+    Symbol ref_sym = Symbol::intern(NULL, name);
+    return Var::intern(Namespace::findOrCreate(ns_sym), ref_sym);
   }
 
   Var RT::var(string ns, string name, Object init){

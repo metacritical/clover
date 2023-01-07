@@ -1,33 +1,30 @@
+
 #ifndef CLOVER_LANG_UNBOUND_H
 #define CLOVER_LANG_UNBOUND_H
 
 #include <iostream>
 #include <set>
 #include "symbol.h"
+#include "afn.h"
 #include "var.h"
 
 namespace clover::lang {
   using namespace std;
 
-  class Unbound : public Object {
+  class Unbound : public AFn {
+    Var var;
+
   public:
-   //std::set<Var, VarComparator> UNBOUND_VAR;
-   Var UNBOUND_VAR[0];
+    Unbound();
 
-    Unbound(Var v){
-      UNBOUND_VAR[0] = v;
+    void setVar(Var var) : var(var){
+      this->var = var;
     }
 
-    std::string toString(){
-      return "Unbound (this->UNBOUND_VAR[0]).toString()";
-    }
+    string toString();
 
-    Object throwArity(int n){
-      throw std::runtime_error("Attempting to call unbound fn: this->UNBOUND_VAR");
-    }
+    Object throwArity(int n);
   };
 };
-
-
 
 #endif

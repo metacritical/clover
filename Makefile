@@ -10,9 +10,6 @@ INCLUDEDIR=src/cpp/clover/lang/
 
 # Strip and Compress Flags
 STRIP=strip
-COMPRESSOR=upx
-STRIP_FLAGS=-s
-COMPRESS_FLAGS=-9
 
 build: clean
 	@echo "Compiling clover ..."
@@ -30,7 +27,6 @@ run:
 	@./clover
 
 compress:
-	$(STRIP) $< $(STRIP_FLAGS) $(BIN_NAME)
-	$(COMPRESSOR) $< $(COMPRESS_FLAGS) $(BIN_NAME)
+	$(STRIP) $< $(BIN_NAME)
 
-default: build
+all: build

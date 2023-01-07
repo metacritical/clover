@@ -21,8 +21,8 @@ namespace clover::lang{
 
     Var intern(Symbol sym);
     Namespace();
-    Namespace(Symbol name) : name(name){
-      this->name = name;
+    Namespace(Symbol n) : name(n){
+      this->name = n;
     };
 
     friend std::ostream& operator<<(ostream& output, Namespace& ns){
