@@ -1,5 +1,6 @@
 #include "object.h"
 #include "var.h"
+#include "unbound.h"
 #include "namespace.h"
 
 namespace clover::lang{
@@ -9,7 +10,7 @@ namespace clover::lang{
   Var::Var(Namespace ns, Symbol sym) : ns(ns), sym(sym){
     this->ns = ns;
     this->sym = sym;
-    this->root = Unbound(Var(ns,sym));
+    this->root = Unbound();
   }
 
   Var Var::intern(Namespace ns, Symbol sym){

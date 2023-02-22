@@ -27,6 +27,7 @@ namespace clover::lang {
     static Var intern(Namespace ns, Symbol sym);
     static Var intern(Symbol nsName, Symbol sym);
     static Var intern(Namespace ns, Symbol sym, Object root);
+    static Var intern(Namespace ns, Symbol sym, Unbound root);
     static Var intern(Namespace ns, Symbol sym, Object root, bool replaceRoot);
     static bool dynamic;
 

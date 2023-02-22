@@ -1,5 +1,6 @@
 #include "symbol.h"
 #include "var.h"
+#include "unbound.h"
 #include "rt.h"
 #include <iostream>
 #include "assert.h"
